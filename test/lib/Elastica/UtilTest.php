@@ -8,7 +8,7 @@ class Elastica_UtilTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEscapeTerm($unescaped, $escaped)
 	{
-		$this->assertEquals($escaped, Elastica_Util::escapeTerm($unescaped));
+		$this->assertEquals($escaped, elastica\Util::escapeTerm($unescaped));
 	}
 
 	public function getEscapeTermPairs()
@@ -27,22 +27,22 @@ class Elastica_UtilTest extends PHPUnit_Framework_TestCase
 		$before = '\\+-&&||!(){}[]^"~*?:';
 		$after = '\\\\\\+\\-\\&&\\||\\!\\(\\)\\{\\}\\[\\]\\^\\"\\~\\*\\?\\:';
 
-		$this->assertEquals(Elastica_Util::escapeTerm($before), $after);
+		$this->assertEquals(elastica\Util::escapeTerm($before), $after);
 	}
 
 	public function testToCamelCase() {
 		$string = 'hello_world';
-		$this->assertEquals('HelloWorld', Elastica_Util::toCamelCase($string));
+		$this->assertEquals('HelloWorld', elastica\Util::toCamelCase($string));
 
 		$string = 'how_are_you_today';
-		$this->assertEquals('HowAreYouToday', Elastica_Util::toCamelCase($string));
+		$this->assertEquals('HowAreYouToday', elastica\Util::toCamelCase($string));
 	}
 
 	public function testToSnakeCase() {
 		$string = 'HelloWorld';
-		$this->assertEquals('hello_world', Elastica_Util::toSnakeCase($string));
+		$this->assertEquals('hello_world', elastica\Util::toSnakeCase($string));
 
 		$string = 'HowAreYouToday';
-		$this->assertEquals('how_are_you_today', Elastica_Util::toSnakeCase($string));
+		$this->assertEquals('how_are_you_today', elastica\Util::toSnakeCase($string));
 	}
 }

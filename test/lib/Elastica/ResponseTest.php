@@ -12,9 +12,9 @@ class Elastica_ResponseTest extends Elastica_Test
 
     public function testClassHierarchy() {
 
-        $facet = new Elastica_Facet_DateHistogram('dateHist1');
-        $this->assertInstanceOf('Elastica_Facet_Histogram', $facet);
-        $this->assertInstanceOf('Elastica_Facet_Abstract', $facet);
+        $facet = new elastica\facet\DateHistogram('dateHist1');
+        $this->assertInstanceOf('elastica\facet\Histogram', $facet);
+        $this->assertInstanceOf('elastica\facet\Abstract_', $facet);
         unset($facet);
     }
 
@@ -23,25 +23,25 @@ class Elastica_ResponseTest extends Elastica_Test
 		$index = $this->_createIndex();
 		$type = $index->getType('helloworld');
 
-        $mapping = new Elastica_Type_Mapping($type, array(
+        $mapping = new elastica\type\Mapping($type, array(
                 'name' => array('type' => 'string', 'store' => 'no'),
                 'dtmPosted' => array('type' => 'date', 'store' => 'no', 'format' => 'yyyy-MM-dd HH:mm:ss')
             ));
         $type->setMapping($mapping);
 
 
-		$doc = new Elastica_Document(1, array('name' => 'nicolas ruflin', 'dtmPosted' => "2011-06-23 21:53:00"));
+		$doc = new elastica\Document(1, array('name' => 'nicolas ruflin', 'dtmPosted' => "2011-06-23 21:53:00"));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('name' => 'raul martinez jr', 'dtmPosted' => "2011-06-23 09:53:00"));
+		$doc = new elastica\Document(2, array('name' => 'raul martinez jr', 'dtmPosted' => "2011-06-23 09:53:00"));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('name' => 'rachelle clemente', 'dtmPosted' => "2011-07-08 08:53:00"));
+		$doc = new elastica\Document(3, array('name' => 'rachelle clemente', 'dtmPosted' => "2011-07-08 08:53:00"));
 		$type->addDocument($doc);
-        $doc = new Elastica_Document(4, array('name' => 'elastica search', 'dtmPosted' => "2011-07-08 01:53:00"));
+        $doc = new elastica\Document(4, array('name' => 'elastica search', 'dtmPosted' => "2011-07-08 01:53:00"));
         $type->addDocument($doc);
 
 
-		$query = new Elastica_Query();
-		$query->setQuery(new Elastica_Query_MatchAll());
+		$query = new elastica\Query();
+		$query->setQuery(new elastica\query\MatchAll());
 		$index->refresh();
 
 		$resultSet = $type->search($query);

@@ -12,10 +12,10 @@ class Elastica_Filter_AndTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testToArray() {
-		$and = new Elastica_Filter_And();
+		$and = new elastica\filter\And_();
 		$this->assertEquals(array('and' => array()), $and->toArray());
 
-		$idsFilter = new Elastica_Filter_Ids();
+		$idsFilter = new elastica\filter\Ids();
 		$idsFilter->setIds(12);
 
 		$and->addFilter($idsFilter);
@@ -34,25 +34,25 @@ class Elastica_Filter_AndTest extends PHPUnit_Framework_TestCase
 
 	public function testSetCache() {
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 		$type = $index->getType('test');
 
-		$doc = new Elastica_Document(1, array('name' => 'hello world'));
+		$doc = new elastica\Document(1, array('name' => 'hello world'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('name' => 'nicolas ruflin'));
+		$doc = new elastica\Document(2, array('name' => 'nicolas ruflin'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('name' => 'ruflin'));
+		$doc = new elastica\Document(3, array('name' => 'ruflin'));
 		$type->addDocument($doc);
 
 
-		$and = new Elastica_Filter_And();
+		$and = new elastica\filter\And_();
 
-		$idsFilter1 = new Elastica_Filter_Ids();
+		$idsFilter1 = new elastica\filter\Ids();
 		$idsFilter1->setIds(1);
 
-		$idsFilter2 = new Elastica_Filter_Ids();
+		$idsFilter2 = new elastica\filter\Ids();
 		$idsFilter2->setIds(1);
 
 		$and->addFilter($idsFilter1);

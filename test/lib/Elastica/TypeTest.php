@@ -13,21 +13,21 @@ class Elastica_TypeTest extends Elastica_Test
 	public function testSearch() {
 		$index = $this->_createIndex();
 
-		$type = new Elastica_Type($index, 'user');
+		$type = new elastica\Type($index, 'user');
 
 
 		// Adds 1 document to the index
-		$doc1 = new Elastica_Document(1,
+		$doc1 = new elastica\Document(1,
 			array('username' => 'hans', 'test' => array('2', '3', '5'))
 		);
 		$type->addDocument($doc1);
 
 		// Adds a list of documents with _bulk upload to the index
 		$docs = array();
-		$docs[] = new Elastica_Document(2,
+		$docs[] = new elastica\Document(2,
 			array('username' => 'john', 'test' => array('1', '3', '6'))
 		);
-		$docs[] = new Elastica_Document(3,
+		$docs[] = new elastica\Document(3,
 			array('username' => 'rolf', 'test' => array('2', '3', '7'))
 		);
 		$type->addDocuments($docs);
@@ -46,8 +46,8 @@ class Elastica_TypeTest extends Elastica_Test
 	public function testNoSource() {
 		$index = $this->_createIndex();
 
-		$type = new Elastica_Type($index, 'user');
-		$mapping = new Elastica_Type_Mapping($type, array(
+		$type = new elastica\Type($index, 'user');
+		$mapping = new elastica\type\Mapping($type, array(
 				'id' => array('type' => 'integer', 'store' => 'yes'),
 				'username' => array('type' => 'string', 'store' => 'no'),
 			));
@@ -56,17 +56,17 @@ class Elastica_TypeTest extends Elastica_Test
 
 
 		// Adds 1 document to the index
-		$doc1 = new Elastica_Document(1,
+		$doc1 = new elastica\Document(1,
 			array('username' => 'hans', 'test' => array('2', '3', '5'))
 		);
 		$type->addDocument($doc1);
 
 		// Adds a list of documents with _bulk upload to the index
 		$docs = array();
-		$docs[] = new Elastica_Document(2,
+		$docs[] = new elastica\Document(2,
 			array('username' => 'john', 'test' => array('1', '3', '6'))
 		);
-		$docs[] = new Elastica_Document(3,
+		$docs[] = new elastica\Document(3,
 			array('username' => 'rolf', 'test' => array('2', '3', '7'))
 		);
 		$type->addDocuments($docs);
@@ -86,13 +86,13 @@ class Elastica_TypeTest extends Elastica_Test
 
 	public function testDeleteDocument() {
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'user');
+		$type = new elastica\Type($index, 'user');
 
 		// Adds hans, john and rolf to the index
 		$docs = array(
-			new Elastica_Document(1, array('username' => 'hans', 'test' => array('2', '3', '5'))),
-			new Elastica_Document(2, array('username' => 'john', 'test' => array('1', '3', '6'))),
-			new Elastica_Document(3, array('username' => 'rolf', 'test' => array('2', '3', '7'))),
+			new elastica\Document(1, array('username' => 'hans', 'test' => array('2', '3', '5'))),
+			new elastica\Document(2, array('username' => 'john', 'test' => array('1', '3', '6'))),
+			new elastica\Document(3, array('username' => 'rolf', 'test' => array('2', '3', '7'))),
 		);
 		$type->addDocuments($docs);
 		$index->refresh();
@@ -127,8 +127,8 @@ class Elastica_TypeTest extends Elastica_Test
 
 	public function testGetDocumentNotExist() {
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'test');
-		$type->addDocument(new Elastica_Document(1, array('name' => 'ruflin')));
+		$type = new elastica\Type($index, 'test');
+		$type->addDocument(new elastica\Document(1, array('name' => 'ruflin')));
 		$index->refresh();
 
 		$type->getDocument(1);
@@ -136,16 +136,16 @@ class Elastica_TypeTest extends Elastica_Test
 		try {
 			$type->getDocument(2);
 			$this->fail('Should throw exceptoin as doc does not exist');
-		} catch (Elastica_Exception_NotFound $e) {
+		} catch (elastica\exception\NotFound $e) {
 			$this->assertTrue(true);
 		}
 	}
 
 	public function testDeleteByQuery() {
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'test');
-		$type->addDocument(new Elastica_Document(1, array('name' => 'ruflin nicolas')));
-		$type->addDocument(new Elastica_Document(2, array('name' => 'ruflin')));
+		$type = new elastica\Type($index, 'test');
+		$type->addDocument(new elastica\Document(1, array('name' => 'ruflin nicolas')));
+		$type->addDocument(new elastica\Document(2, array('name' => 'ruflin')));
 		$index->refresh();
 
 		$response = $index->search('ruflin*');

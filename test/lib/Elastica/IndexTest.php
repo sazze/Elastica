@@ -7,7 +7,7 @@ class Elastica_IndexTest extends Elastica_Test
 {
 	public function testMapping() {
 		$index = $this->_createIndex();
-		$doc = new Elastica_Document(1, array('id' => 1, 'email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
+		$doc = new elastica\Document(1, array('id' => 1, 'email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
 
 		$type = $index->getType('test');
 
@@ -34,37 +34,37 @@ class Elastica_IndexTest extends Elastica_Test
 	}
 
 	public function testParent() {
-		
+
 		$index = $this->_createIndex();
-		
-		$typeBlog = new Elastica_Type($index, 'blog');
 
-		$typeComment = new Elastica_Type($index, 'comment');
+		$typeBlog = new elastica\Type($index, 'blog');
 
-		$mapping = new Elastica_Type_Mapping();
+		$typeComment = new elastica\Type($index, 'comment');
+
+		$mapping = new elastica\type\Mapping();
 		$mapping->setParam('_parent', array('type' => 'blog'));
 		$typeComment->setMapping($mapping);
 
-		$entry1 = new Elastica_Document(1);
+		$entry1 = new elastica\Document(1);
 		$entry1->add('title', 'Hello world');
 		$typeBlog->addDocument($entry1);
 
-		$entry2 = new Elastica_Document(2);
+		$entry2 = new elastica\Document(2);
 		$entry2->add('title', 'Foo bar');
 		$typeBlog->addDocument($entry2);
 
-		$entry3 = new Elastica_Document(3);
+		$entry3 = new elastica\Document(3);
 		$entry3->add('title', 'Till dawn');
 		$typeBlog->addDocument($entry3);
 
-		$comment = new Elastica_Document(1);
+		$comment = new elastica\Document(1);
 		$comment->add('author', 'Max');
 		$comment->setParent(2); // Entry Foo bar
 		$typeComment->addDocument($comment);
 
 		$index->optimize();
 
-		$query = new Elastica_Query_HasChild('Max', 'comment');
+		$query = new elastica\query\HasChild('Max', 'comment');
 		$resultSet = $typeBlog->search($query);
 		$this->assertEquals(1, $resultSet->count());
 		$this->assertEquals(array('title' => 'Foo bar'), $resultSet->current()->getData());
@@ -85,17 +85,17 @@ class Elastica_IndexTest extends Elastica_Test
 		);
 
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'test');
+		$type = new elastica\Type($index, 'test');
 
 		$index->create($indexParams, true);
 		$type->setMapping($indexMapping);
 
-		$doc1 = new Elastica_Document(1);
+		$doc1 = new elastica\Document(1);
 		$doc1->addFile('file', BASE_PATH . '/data/test.pdf');
 		$doc1->add('text', 'basel world');
 		$type->addDocument($doc1);
 
-		$doc2 = new Elastica_Document(2);
+		$doc2 = new elastica\Document(2);
 		$doc2->add('text', 'running in basel');
 		$type->addDocument($doc2);
 
@@ -110,53 +110,53 @@ class Elastica_IndexTest extends Elastica_Test
 		// Author is ruflin
 		$resultSet = $type->search('ruflin');
 		$this->assertEquals(1, $resultSet->count());
-		
+
 		// String does not exist in file
 		$resultSet = $type->search('guschti');
 		$this->assertEquals(0, $resultSet->count());
 	}
-	
+
 	public function testAddPDFFileContent() {
-	
+
 		$indexMapping = array(
 			'file' => array('type' => 'attachment', 'store' => 'no'),
 			'text' => array('type' => 'string', 'store' => 'no'),
 		);
-	
+
 		$indexParams = array(
 			'index' => array(
 				'number_of_shards' => 1,
 				'number_of_replicas' => 0
 			),
 		);
-	
+
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'test');
-	
+		$type = new elastica\Type($index, 'test');
+
 		$index->create($indexParams, true);
 		$type->setMapping($indexMapping);
-		
-		$doc1 = new Elastica_Document(1);
+
+		$doc1 = new elastica\Document(1);
 		$doc1->addFileContent('file', file_get_contents(BASE_PATH . '/data/test.pdf'));
 		$doc1->add('text', 'basel world');
 		$type->addDocument($doc1);
-	
-		$doc2 = new Elastica_Document(2);
+
+		$doc2 = new elastica\Document(2);
 		$doc2->add('text', 'running in basel');
 		$type->addDocument($doc2);
-	
+
 		$index->optimize();
-	
+
 		$resultSet = $type->search('xodoa');
 		$this->assertEquals(1, $resultSet->count());
-	
+
 		$resultSet = $type->search('basel');
 		$this->assertEquals(2, $resultSet->count());
-	
+
 		// Author is ruflin
 		$resultSet = $type->search('ruflin');
 		$this->assertEquals(1, $resultSet->count());
-	
+
 		// String does not exist in file
 		$resultSet = $type->search('guschti');
 		$this->assertEquals(0, $resultSet->count());
@@ -176,17 +176,17 @@ class Elastica_IndexTest extends Elastica_Test
 		);
 
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'content');
+		$type = new elastica\Type($index, 'content');
 
 		$index->create($indexParams, true);
 		$type->setMapping($indexMapping);
 
-		$doc1 = new Elastica_Document(1);
+		$doc1 = new elastica\Document(1);
 		$doc1->addFile('file', BASE_PATH . '/data/test.docx');
 		$doc1->add('text', 'basel world');
 		$type->addDocument($doc1);
 
-		$doc2 = new Elastica_Document(2);
+		$doc2 = new elastica\Document(2);
 		$doc2->add('text', 'running in basel');
 		$type->addDocument($doc2);
 
@@ -201,54 +201,54 @@ class Elastica_IndexTest extends Elastica_Test
 		$resultSet = $type->search('ruflin');
 		$this->assertEquals(0, $resultSet->count());
 	}
-	
+
 	public function testExcludeFileSource() {
-		
+
 		$indexMapping = array(
 			'file' => array('type' => 'attachment', 'store' => 'yes'),
 			'text' => array('type' => 'string', 'store' => 'yes'),
 			'title' => array('type' => 'string', 'store' => 'yes'),
 		);
-		
+
 		$indexParams = array(
 			'index' => array(
 				'number_of_shards' => 1,
 				'number_of_replicas' => 0
 			),
 		);
-		
+
 		$index = $this->_createIndex();
-		$type = new Elastica_Type($index, 'content');
-		
-		$mapping = Elastica_Type_Mapping::create($indexMapping);
+		$type = new elastica\Type($index, 'content');
+
+		$mapping = elastica\type\Mapping::create($indexMapping);
 		$mapping->setSource(array('excludes' => array('file')));
-		
+
 		$mapping->setType($type);
-				
+
 		$index->create($indexParams, true);
 		$type->setMapping($mapping);
-		
+
 		$docId = 1;
 		$text = 'Basel World';
 		$title = 'No Title';
-		
-		$doc1 = new Elastica_Document($docId);
+
+		$doc1 = new elastica\Document($docId);
 		$doc1->addFile('file', BASE_PATH . '/data/test.docx');
 		$doc1->add('text', $text);
 		$doc1->add('title', $title);
 		$type->addDocument($doc1);
-		
+
 		// Optimization necessary, as otherwise source still in realtime get
 		$index->optimize();
 
 		$data = $type->getDocument($docId)->getData();
 		$this->assertEquals($data['title'], $title);
 		$this->assertEquals($data['text'], $text);
-		$this->assertFalse(isset($data['file']));		
+		$this->assertFalse(isset($data['file']));
 	}
 
 	public function testAddRemoveAlias() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 
 		$indexName1 = 'test1';
 		$aliasName = 'test-alias';
@@ -257,7 +257,7 @@ class Elastica_IndexTest extends Elastica_Test
 		$index = $client->getIndex($indexName1);
 		$index->create(array('index' => array('number_of_shards' => 1, 'number_of_replicas' => 0)), true);
 
-		$doc = new Elastica_Document(1, array('id' => 1, 'email' => 'test@test.com', 'username' => 'ruflin'));
+		$doc = new elastica\Document(1, array('id' => 1, 'email' => 'test@test.com', 'username' => 'ruflin'));
 
 		$type = $index->getType($typeName);
 		$type->addDocument($doc);
@@ -282,7 +282,7 @@ class Elastica_IndexTest extends Elastica_Test
 		try {
 			$client->getIndex($aliasName)->getType($typeName)->search('ruflin');
 			$this->fail('Should throw no index exception');
-		} catch (Elastica_Exception_Response $e) {
+		} catch (elastica\exception\Response $e) {
 			$this->assertTrue(true);
 		}
 	}
@@ -291,13 +291,13 @@ class Elastica_IndexTest extends Elastica_Test
 		$indexName = 'test';
 		$aliasName = 'test-aliase';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 
 		$index->create(array(), true);
 		$index->addAlias($aliasName);
 
-		$status = new Elastica_Status($client);
+		$status = new elastica\Status($client);
 		$this->assertTrue($status->indexExists($indexName));
 		$this->assertTrue($status->aliasExists($aliasName));
 
@@ -314,7 +314,7 @@ class Elastica_IndexTest extends Elastica_Test
 		$indexName2 = 'test2';
 		$aliasName = 'test-alias';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index1 = $client->getIndex($indexName1);
 		$index2 = $client->getIndex($indexName2);
 
@@ -322,7 +322,7 @@ class Elastica_IndexTest extends Elastica_Test
 		$index1->addAlias($aliasName);
 		$index2->create(array(), true);
 
-		$status = new Elastica_Status($client);
+		$status = new elastica\Status($client);
 		$this->assertTrue($status->indexExists($indexName1));
 		$this->assertTrue($status->indexExists($indexName2));
 		$this->assertTrue($status->aliasExists($aliasName));
@@ -339,7 +339,7 @@ class Elastica_IndexTest extends Elastica_Test
 		$indexName2 = 'test2';
 		$aliasName = 'test-alias';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index1 = $client->getIndex($indexName1);
 		$index2 = $client->getIndex($indexName2);
 
@@ -347,7 +347,7 @@ class Elastica_IndexTest extends Elastica_Test
 		$index1->addAlias($aliasName);
 		$index2->create(array(), true);
 
-		$status = new Elastica_Status($client);
+		$status = new elastica\Status($client);
 		$this->assertTrue($status->indexExists($indexName1));
 		$this->assertTrue($status->indexExists($indexName2));
 		$this->assertTrue($status->aliasExists($aliasName));
@@ -358,27 +358,27 @@ class Elastica_IndexTest extends Elastica_Test
 		$this->assertFalse($index1->getStatus()->hasAlias($aliasName));
 		$this->assertTrue($index2->getStatus()->hasAlias($aliasName));
 	}
-	
+
 	public function testAddDocumentVersion() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
-		$type = new Elastica_Type($index, 'test');
+		$type = new elastica\Type($index, 'test');
 
-		$doc1 = new Elastica_Document(1);
+		$doc1 = new elastica\Document(1);
 		$doc1->add('title', 'Hello world');
-		
+
 		$return = $type->addDocument($doc1);
 		$data = $return->getData();
 		$this->assertEquals(1, $data['_version']);
-				
+
 		$return = $type->addDocument($doc1);
 		$data = $return->getData();
 		$this->assertEquals(2, $data['_version']);
 	}
 
 	public function testClearCache() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index1 = $client->getIndex('test1');
 
 		$response = $index1->clearCache();
@@ -386,7 +386,7 @@ class Elastica_IndexTest extends Elastica_Test
 	}
 
 	public function testFlush() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test1');
 
 		$response = $index->flush();
@@ -408,16 +408,16 @@ class Elastica_IndexTest extends Elastica_Test
 	*
 	* Tests if deleting an index that does not exist in Elasticsearch,
 	* correctly returns a boolean true from the hasError() method of
-	* the Elastica_Response object
+	* the elastica\Response object
 	*/
 	public function testDeleteMissingIndexHasError() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('index_does_not_exist');
 
 		try {
 			$index->delete();
 			$this->fail('This should never be reached. Deleting an unknown index will throw an exception');
-		} catch (Elastica_Exception_Response $error) {
+		} catch (elastica\exception\Response $error) {
 			$response = $error->getResponse();
 			$this->assertTrue($response->hasError());
 		}

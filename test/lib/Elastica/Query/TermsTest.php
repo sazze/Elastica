@@ -10,20 +10,20 @@ class Elastica_Query_TermsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testFilteredSearch() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 		$type = $index->getType('helloworld');
 
-		$doc = new Elastica_Document(1, array('name' => 'hello world'));
+		$doc = new elastica\Document(1, array('name' => 'hello world'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('name' => 'nicolas ruflin'));
+		$doc = new elastica\Document(2, array('name' => 'nicolas ruflin'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('name' => 'ruflin'));
+		$doc = new elastica\Document(3, array('name' => 'ruflin'));
 		$type->addDocument($doc);
 
 
-		$query = new Elastica_Query_Terms();
+		$query = new elastica\query\Terms();
 		$query->setTerms('name', array('nicolas', 'hello'));
 
 		$index->refresh();
@@ -43,7 +43,7 @@ class Elastica_Query_TermsTest extends PHPUnit_Framework_TestCase
 		$terms = array('nicolas', 'ruflin');
 		$minimum = 2;
 
-		$query = new Elastica_Query_Terms($key, $terms);
+		$query = new elastica\query\Terms($key, $terms);
 		$query->setMinimumMatch($minimum);
 
 		$data = $query->toArray();
@@ -51,12 +51,12 @@ class Elastica_Query_TermsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testInvalidParams() {
-		$query = new Elastica_Query_Terms();
+		$query = new elastica\query\Terms();
 
 		try {
 			$query->toArray();
 			$this->fail('Should throw exception because no key');
-		} catch (Elastica_Exception_Invalid $e) {
+		} catch (elastica\exception\Invalid $e) {
 			$this->assertTrue(true);
 		}
 

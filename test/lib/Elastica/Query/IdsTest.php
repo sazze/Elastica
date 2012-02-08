@@ -7,23 +7,23 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	protected $_type;
 
 	public function setUp() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 
 		$type1 = $index->getType('helloworld1');
 		$type2 = $index->getType('helloworld2');
 
-		$doc = new Elastica_Document(1, array('name' => 'hello world'));
+		$doc = new elastica\Document(1, array('name' => 'hello world'));
 		$type1->addDocument($doc);
 
-		$doc = new Elastica_Document(2, array('name' => 'nicolas ruflin'));
+		$doc = new elastica\Document(2, array('name' => 'nicolas ruflin'));
 		$type1->addDocument($doc);
 
-		$doc = new Elastica_Document(3, array('name' => 'ruflin'));
+		$doc = new elastica\Document(3, array('name' => 'ruflin'));
 		$type1->addDocument($doc);
 
-		$doc = new Elastica_Document(4, array('name' => 'hello world again'));
+		$doc = new elastica\Document(4, array('name' => 'hello world again'));
 		$type2->addDocument($doc);
 
 		$index->refresh();
@@ -33,13 +33,13 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function tearDown() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->delete();
 	}
 
 	public function testSetIdsSearchSingle() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 		$query->setIds('1');
 
 		$resultSet = $this->_type->search($query);
@@ -48,7 +48,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetIdsSearchArray() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 		$query->setIds(array('1', '2'));
 
 		$resultSet = $this->_type->search($query);
@@ -57,7 +57,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testAddIdsSearchSingle() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 		$query->addId('3');
 
 		$resultSet = $this->_type->search($query);
@@ -66,7 +66,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testComboIdsSearchArray() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		$query->setIds(array('1', '2'));
 		$query->addId('3');
@@ -77,7 +77,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetTypeSingleSearchSingle() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		$query->setIds('1');
 		$query->setType('helloworld1');
@@ -88,7 +88,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetTypeSingleSearchArray() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		$query->setIds(array('1', '2'));
 		$query->setType('helloworld1');
@@ -99,7 +99,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetTypeSingleSearchSingleDocInOtherType() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		// Doc 4 is in the second type...
 		$query->setIds('4');
@@ -112,7 +112,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetTypeSingleSearchArrayDocInOtherType() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		// Doc 4 is in the second type...
 		$query->setIds(array('1', '4'));
@@ -125,7 +125,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetTypeArraySearchArray() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		$query->setIds(array('1', '4'));
 		$query->setType(array('helloworld1', 'helloworld2'));
@@ -136,7 +136,7 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetTypeArraySearchSingle() {
-		$query = new Elastica_Query_Ids();
+		$query = new elastica\query\Ids();
 
 		$query->setIds('4');
 		$query->setType(array('helloworld1', 'helloworld2'));
@@ -146,4 +146,3 @@ class Elastica_Query_IdsTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, $resultSet->count());
 	}
 }
-

@@ -14,10 +14,10 @@ class Elastica_Exception_NotImplementedTest extends PHPUnit_Framework_TestCase
 	public function testInstance() {
 		$code = 4;
 		$message = 'Hello world';
-		$exception = new Elastica_Exception_NotImplemented($message, $code);
+		$exception = new elastica\exception\NotImplemented($message, $code);
 
-		$this->assertInstanceOf('Elastica_Exception_NotImplemented', $exception);
-		$this->assertInstanceOf('Elastica_Exception_Abstract', $exception);
+		$this->assertInstanceOf('elastica\exception\NotImplemented', $exception);
+		$this->assertInstanceOf('elastica\exception\Abstract_', $exception);
 		$this->assertInstanceOf('Exception', $exception);
 
 		$this->assertEquals($message, $exception->getMessage());

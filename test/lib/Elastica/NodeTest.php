@@ -9,40 +9,40 @@ class Elastica_NodeTest extends Elastica_Test
 
 	public function testCreateNode() {
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$names = $client->getCluster()->getNodeNames();
 		$name = reset($names);
 
-		$node = new Elastica_Node($name, $client);
-		$this->assertInstanceOf('Elastica_Node', $node);
+		$node = new elastica\Node($name, $client);
+		$this->assertInstanceOf('elastica\Node', $node);
 	}
 
 	public function testGetInfo() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$names = $client->getCluster()->getNodeNames();
 		$name = reset($names);
 
-		$node = new Elastica_Node($name, $client);
+		$node = new elastica\Node($name, $client);
 
 		$info = $node->getInfo();
 
-		$this->assertInstanceOf('Elastica_Node_Info', $info);
+		$this->assertInstanceOf('elastica\node\Info', $info);
 	}
 
 	public function testGetStats() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$names = $client->getCluster()->getNodeNames();
 		$name = reset($names);
 
-		$node = new Elastica_Node($name, $client);
+		$node = new elastica\Node($name, $client);
 
 		$stats = $node->getStats();
 
-		$this->assertInstanceOf('Elastica_Node_Stats', $stats);
+		$this->assertInstanceOf('elastica\node\Stats', $stats);
 	}
 
 	public function testShutdown() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$nodes = $client->getCluster()->getNodes();
 
 		$count = count($nodes);
@@ -56,7 +56,7 @@ class Elastica_NodeTest extends Elastica_Test
 
 		sleep(5);
 
-		$client = new Elastica_Client(array('host' => $info->getIp(), 'port' => $info->getPort()));
+		$client = new elastica\Client(array('host' => $info->getIp(), 'port' => $info->getPort()));
 		$names = $client->getCluster()->getNodeNames();
 
 		// One node less ...

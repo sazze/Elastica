@@ -11,20 +11,20 @@ class Elastica_SearchTest extends Elastica_Test
 	}
 
 	public function testConstruct() {
-		$client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search = new elastica\Search($client);
 
-		$this->assertInstanceOf('Elastica_Search', $search);
+		$this->assertInstanceOf('elastica\Search', $search);
 		$this->assertSame($client, $search->getClient());
 	}
 
 	public function testAddIndex() {
-		$client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search = new elastica\Search($client);
 
 		$index1 = $this->_createIndex('test1');
 		$index2 = $this->_createIndex('test2');
-		
+
 		$search->addIndex($index1);
 		$indices = $search->getIndices();
 
@@ -48,8 +48,8 @@ class Elastica_SearchTest extends Elastica_Test
 
     public function testAddIndices()
     {
-        $client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+        $client = new elastica\Client();
+		$search = new elastica\Search($client);
 
         $indices = array();
         $indices[] = $client->getIndex('elastica_test1');
@@ -61,8 +61,8 @@ class Elastica_SearchTest extends Elastica_Test
     }
 
 	public function testAddType() {
-		$client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search = new elastica\Search($client);
 
 		$index = $this->_createIndex();
 
@@ -94,8 +94,8 @@ class Elastica_SearchTest extends Elastica_Test
 
     public function testAddTypes()
     {
-        $client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+        $client = new elastica\Client();
+		$search = new elastica\Search($client);
 
 		$index = $this->_createIndex();
 
@@ -109,37 +109,37 @@ class Elastica_SearchTest extends Elastica_Test
     }
 
 	public function testAddTypeInvalid() {
-		$client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search = new elastica\Search($client);
 
 		try {
 			$search->addType(new stdClass());
 			$this->fail('Should throw invalid exception');
-		} catch(Elastica_Exception_Invalid $e) {
+		} catch(elastica\exception\Invalid $e) {
 			$this->assertTrue(true);
 		}
 	}
 
 	public function testAddIndexInvalid() {
-		$client = new Elastica_Client();
-		$search = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search = new elastica\Search($client);
 
 		try {
 			$search->addIndex(new stdClass());
 			$this->fail('Should throw invalid exception');
-		} catch(Elastica_Exception_Invalid $e) {
+		} catch(elastica\exception\Invalid $e) {
 			$this->assertTrue(true);
 		}
 	}
 
 	public function testGetPath() {
-		$client = new Elastica_Client();
-		$search1 = new Elastica_Search($client);
-		$search2 = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search1 = new elastica\Search($client);
+		$search2 = new elastica\Search($client);
 
 		$index1 = $this->_createIndex('test1');
 		$index2 = $this->_createIndex('test2');
-		
+
 
 		$type1 = $index1->getType('type1');
 		$type2 = $index1->getType('type2');
@@ -169,10 +169,10 @@ class Elastica_SearchTest extends Elastica_Test
 	}
 
 	public function testSearchRequest() {
-		$client = new Elastica_Client();
-		$search1 = new Elastica_Search($client);
+		$client = new elastica\Client();
+		$search1 = new elastica\Search($client);
 
-		
+
 		$index1 = $this->_createIndex('test1');
 		$index2 = $this->_createIndex('test2');
 

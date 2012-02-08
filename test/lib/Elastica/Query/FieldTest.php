@@ -11,18 +11,18 @@ class Elastica_Query_FieldTest extends PHPUnit_Framework_TestCase
 
 	public function testTextPhrase() {
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 		$type = $index->getType('test');
 
-		$doc = new Elastica_Document(1, array('name' => 'Basel-Stadt'));
+		$doc = new elastica\Document(1, array('name' => 'Basel-Stadt'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('name' => 'New York'));
+		$doc = new elastica\Document(2, array('name' => 'New York'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('name' => 'Baden'));
+		$doc = new elastica\Document(3, array('name' => 'Baden'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(4, array('name' => 'Baden Baden'));
+		$doc = new elastica\Document(4, array('name' => 'Baden Baden'));
 		$type->addDocument($doc);
 
 
@@ -31,7 +31,7 @@ class Elastica_Query_FieldTest extends PHPUnit_Framework_TestCase
 		$type = 'text_phrase';
 		$field = 'name';
 
-		$query = new Elastica_Query_Field();
+		$query = new elastica\query\Field();
 		$query->setField('name');
 		$query->setQueryString('"Baden Baden"');
 
@@ -41,7 +41,7 @@ class Elastica_Query_FieldTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testToArray() {
-		$query = new Elastica_Query_Field('user', 'jack');
+		$query = new elastica\query\Field('user', 'jack');
 		$expected = array('field' => array('user' => array('query' => 'jack')));
 
 		$this->assertSame($expected, $query->toArray());

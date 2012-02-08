@@ -6,15 +6,15 @@ class Elastica_PercolatorTest extends Elastica_Test
 {
 	public function testConstruct() {
 		$index = $this->_createIndex();
-		$percolator = new Elastica_Percolator($index);
-		
+		$percolator = new elastica\Percolator($index);
+
 		$percolatorName = 'percotest';
-		
-		$query = new Elastica_Query_Term(array('field1' => 'value1'));
+
+		$query = new elastica\query\Term(array('field1' => 'value1'));
 		$response = $percolator->registerQuery($percolatorName, $query);
-		
+
 		$data = $response->getData();
-		
+
 		$expectedArray = array(
 			'ok' => true,
 			'_type' => $index->getName(),
@@ -25,33 +25,35 @@ class Elastica_PercolatorTest extends Elastica_Test
 
 		$this->assertEquals($expectedArray, $data);
 	}
-	
+
 	public function testMatchDoc() {
+		$this->markTestSkipped('There is a bug in ElasticSearch:  https://github.com/elasticsearch/elasticsearch/issues/763');
+
 		$index = $this->_createIndex();
-		$percolator = new Elastica_Percolator($index);
-		
+		$percolator = new elastica\Percolator($index);
+
 		$percolatorName = 'percotest';
-		
-		$query = new Elastica_Query_Term(array('name' => 'ruflin'));
+
+		$query = new elastica\query\Term(array('name' => 'ruflin'));
 		$response = $percolator->registerQuery($percolatorName, $query);
 
 		$this->assertTrue($response->isOk());
 		$this->assertFalse($response->hasError());
 
-		$doc1 = new Elastica_Document();
+		$doc1 = new elastica\Document();
 		$doc1->add('name', 'ruflin');
 
-		$doc2 = new Elastica_Document();
+		$doc2 = new elastica\Document();
 		$doc2->add('name', 'nicolas');
 
-		$index = new Elastica_Index($index->getClient(), '_percolator');
+		$index = new elastica\Index($index->getClient(), '_percolator');
 		$index->refresh();
-		
+
 		$matches1 = $percolator->matchDoc($doc1);
-		
+
 		$this->assertTrue(in_array($percolatorName, $matches1));
 		$this->assertEquals(1, count($matches1));
-		
+
 		$matches2 = $percolator->matchDoc($doc2);
 		$this->assertEmpty($matches2);
 	}

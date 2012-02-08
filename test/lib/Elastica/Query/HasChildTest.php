@@ -10,12 +10,12 @@ class Elastica_Query_HasChildTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testToArray() {
-		$ids = new Elastica_Query_Ids();
+		$ids = new elastica\query\Ids();
 		$ids->setIds(12);
 
 		$type = 'test';
 
-		$query = new Elastica_Query_HasChild($ids, $type);
+		$query = new elastica\query\HasChild($ids, $type);
 		$query->setType($type);
 
 		$expectedArray = array(
