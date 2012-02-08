@@ -10,20 +10,20 @@ class Elastica_Query_HighlightTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testHightlightSearch() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 		$type = $index->getType('helloworld');
 
 		$phrase = 'My name is ruflin';
 
-		$doc = new Elastica_Document(1, array('id' => 1, 'phrase' => $phrase, 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
+		$doc = new elastica\Document(1, array('id' => 1, 'phrase' => $phrase, 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('id' => 2, 'phrase' => $phrase, 'username' => 'peter', 'test' => array('2', '3', '5')));
+		$doc = new elastica\Document(2, array('id' => 2, 'phrase' => $phrase, 'username' => 'peter', 'test' => array('2', '3', '5')));
 		$type->addDocument($doc);
 
-		$queryString = new Elastica_Query_QueryString('rufl*');
-		$query = new Elastica_Query($queryString);
+		$queryString = new elastica\query\QueryString('rufl*');
+		$query = new elastica\Query($queryString);
 		$query->setHighlight(array(
 			'pre_tags' => array('<em class="highlight">'),
 			'post_tags' => array('</em>'),

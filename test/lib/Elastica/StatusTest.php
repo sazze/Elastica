@@ -12,31 +12,31 @@ class Elastica_StatusTest extends Elastica_Test
 
 	public function testGetResponse() {
 		$index = $this->_createIndex();
-		$status = new Elastica_Status($index->getClient());
-		$this->assertInstanceOf('Elastica_Response', $status->getResponse());
+		$status = new elastica\Status($index->getClient());
+		$this->assertInstanceOf('elastica\Response', $status->getResponse());
 	}
 
 	public function testGetIndexStatuses() {
 		$index = $this->_createIndex();
 
-		$status = new Elastica_Status($index->getClient());
+		$status = new elastica\Status($index->getClient());
 		$statuses = $status->getIndexStatuses();
 
 		$this->assertInternalType('array', $statuses);
 
 		foreach($statuses as $indexStatus) {
-			$this->assertInstanceOf('Elastica_Index_Status', $indexStatus);
+			$this->assertInstanceOf('elastica\index\Status', $indexStatus);
 		}
 	}
 
 	public function testGetIndexNames() {
 		$indexName = 'test';
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 		$index = $this->_createIndex();
 
-		$status = new Elastica_Status($index->getClient());
+		$status = new elastica\Status($index->getClient());
 		$names = $status->getIndexNames();
 
 		$this->assertInternalType('array', $names);
@@ -51,15 +51,15 @@ class Elastica_StatusTest extends Elastica_Test
 		$indexName = 'elastica_test';
 		$aliasName = 'elastica_test-alias';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 
 		try {
 			// Make sure index is deleted first
 			$index->delete();
-		} catch(Elastica_Exception_Response $e) { }
+		} catch(elastica\exception\Response $e) { }
 
-		$status = new Elastica_Status($client);
+		$status = new elastica\Status($client);
 		$this->assertFalse($status->indexExists($indexName));
 		$index->create();
 
@@ -73,7 +73,7 @@ class Elastica_StatusTest extends Elastica_Test
 
 		$index1 = $this->_createIndex();
 
-		$status = new Elastica_Status($index1->getClient());
+		$status = new elastica\Status($index1->getClient());
 
 		foreach($status->getIndicesWithAlias($aliasName) as $tmpIndex) {
 			$tmpIndex->removeAlias($aliasName);
@@ -88,7 +88,7 @@ class Elastica_StatusTest extends Elastica_Test
 
     public function testServerStatus() {
 
-        $client = new Elastica_Client();
+        $client = new elastica\Client();
         $status = $client->getStatus();
         $serverStatus = $status->getServerStatus();
 

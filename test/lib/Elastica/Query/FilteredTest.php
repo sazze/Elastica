@@ -10,26 +10,26 @@ class Elastica_Query_FilteredTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testFilteredSearch() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 		$type = $index->getType('helloworld');
 
-		$doc = new Elastica_Document(1, array('id' => 1, 'email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
+		$doc = new elastica\Document(1, array('id' => 1, 'email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('id' => 2, 'email' => 'test@test.com', 'username' => 'peter', 'test' => array('2', '3', '5')));
+		$doc = new elastica\Document(2, array('id' => 2, 'email' => 'test@test.com', 'username' => 'peter', 'test' => array('2', '3', '5')));
 		$type->addDocument($doc);
 
-		$queryString = new Elastica_Query_QueryString('test*');
+		$queryString = new elastica\query\QueryString('test*');
 
-		$filter1 = new Elastica_Filter_Term();
+		$filter1 = new elastica\filter\Term();
 		$filter1->setTerm('username', 'peter');
 
-		$filter2 = new Elastica_Filter_Term();
+		$filter2 = new elastica\filter\Term();
 		$filter2->setTerm('username', 'qwerqwer');
 
-		$query1 = new Elastica_Query_Filtered($queryString, $filter1);
-		$query2 = new Elastica_Query_Filtered($queryString, $filter2);
+		$query1 = new elastica\query\Filtered($queryString, $filter1);
+		$query2 = new elastica\query\Filtered($queryString, $filter2);
 		$index->refresh();
 
 		$resultSet = $type->search($queryString);

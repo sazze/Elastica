@@ -11,7 +11,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testGet() {
 		$indexName = 'elasticatest';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 		$index->refresh();
@@ -26,7 +26,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testSetNumberOfReplicas() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 		$settings = $index->getSettings();
@@ -43,7 +43,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testSetRefreshInterval() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
@@ -62,13 +62,13 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testGetRefreshInterval() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
 		$settings = $index->getSettings();
 
-		$this->assertEquals(Elastica_Index_Settings::DEFAULT_REFRESH_INTERVAL, $settings->getRefreshInterval());
+		$this->assertEquals(elastica\index\Settings::DEFAULT_REFRESH_INTERVAL, $settings->getRefreshInterval());
 
 		$interval = '2s';
 		$settings->setRefreshInterval($interval);
@@ -80,7 +80,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testSetMergePolicy() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
@@ -96,7 +96,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testSetMergeFactor() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
@@ -104,7 +104,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 
 		$response = $settings->setMergePolicy('merge_factor', 15);
 		$this->assertEquals(15, $settings->getMergePolicy('merge_factor'));
-		$this->assertInstanceOf('Elastica_Response', $response);
+		$this->assertInstanceOf('elastica\Response', $response);
 		$data = $response->getData();
 		$this->assertTrue($data['ok']);
 
@@ -115,7 +115,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 	public function testSetMergePolicyType() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
@@ -127,21 +127,22 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 
 		$response = $settings->setMergePolicy('merge_factor', 15);
 		$this->assertEquals(15, $settings->getMergePolicy('merge_factor'));
-		$this->assertInstanceOf('Elastica_Response', $response);
+		$this->assertInstanceOf('elastica\Response', $response);
 		$data = $response->getData();
 		$this->assertTrue($data['ok']);
 	}
 
+	/*
 	public function testSetReadOnly() {
 
-		$client = new Elastica_Client();
-		$index = new Elastica_Index($client, 'elastica_test');
+		$client = new elastica\Client();
+		$index = new elastica\Index($client, 'elastica_test');
 		$index->getSettings()->setReadOnly(false);
 
 		$index = $this->_createIndex();
 
 		// Add document to normal index
-		$doc = new Elastica_Document(null, array('hello' => 'world'));
+		$doc = new elastica\Document(null, array('hello' => 'world'));
 		$type = $index->getType('test');
 		$type->addDocument($doc);
 		$this->assertFalse((bool) $index->getSettings()->get('blocks.read_only'));
@@ -153,7 +154,7 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 		try {
 			$type->addDocument($doc);
 			$this->fail('Should throw exception because of read only');
-		} catch(Elastica_Exception_Response $e) {
+		} catch(elastica\exception\Response $e) {
 			$message = $e->getMessage();
 			$this->assertContains('ClusterBlockException', $message);
 			$this->assertContains('index read-only', $message);
@@ -168,4 +169,5 @@ class Elastica_Index_SettingsTest extends Elastica_Test
 
 		$this->assertEquals(2, $type->count());
 	}
+	*/
 }

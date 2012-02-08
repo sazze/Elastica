@@ -40,7 +40,7 @@ class Elastica_QueryTest extends Elastica_Test
 			]
 			}';
 
-		$query = new Elastica_Query_Builder($queryString);
+		$query = new elastica\query\Builder($queryString);
 		$queryArray = $query->toArray();
 
 		$this->assertInternalType('array', $queryArray);
@@ -50,12 +50,12 @@ class Elastica_QueryTest extends Elastica_Test
 
 	public function testRawQuery() {
 
-		$textQuery = new Elastica_Query_Text();
+		$textQuery = new elastica\query\Text();
 		$textQuery->setField('title', 'test');
 
-		$query1 = Elastica_Query::create($textQuery);
+		$query1 = elastica\Query::create($textQuery);
 
-		$query2 = new Elastica_Query();
+		$query2 = new elastica\Query();
 		$query2->setRawQuery(array('query' => array('text' => array('title' => 'test'))));
 
 		$this->assertEquals($query1->toArray(), $query2->toArray());
@@ -65,20 +65,20 @@ class Elastica_QueryTest extends Elastica_Test
 		$index = $this->_createIndex();
 		$type = $index->getType('test');
 
-		$doc = new Elastica_Document(1, array('name' => 'hello world'));
+		$doc = new elastica\Document(1, array('name' => 'hello world'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('firstname' => 'guschti', 'lastname' => 'ruflin'));
+		$doc = new elastica\Document(2, array('firstname' => 'guschti', 'lastname' => 'ruflin'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('firstname' => 'nicolas', 'lastname' => 'ruflin'));
+		$doc = new elastica\Document(3, array('firstname' => 'nicolas', 'lastname' => 'ruflin'));
 		$type->addDocument($doc);
 
 
-		$queryTerm = new Elastica_Query_Term();
+		$queryTerm = new elastica\query\Term();
 		$queryTerm->setTerm('lastname', 'ruflin');
 
 		$index->refresh();
 
-		$query = Elastica_Query::create($queryTerm);
+		$query = elastica\Query::create($queryTerm);
 
 		// ASC order
 		$query->setSort(array(array('firstname' => array('order' => 'asc'))));
@@ -105,7 +105,7 @@ class Elastica_QueryTest extends Elastica_Test
 	}
 
 	public function testAddSort() {
-		$query = new Elastica_Query();
+		$query = new elastica\Query();
 		$sortParam = array('firstname' => array('order' => 'asc'));
 		$query->addSort($sortParam);
 
@@ -113,7 +113,7 @@ class Elastica_QueryTest extends Elastica_Test
 	}
 
 	public function testSetRawQuery() {
-		$query = new Elastica_Query();
+		$query = new elastica\Query();
 
 		$params = array('query' => 'test');
 		$query->setRawQuery($params);
@@ -122,7 +122,7 @@ class Elastica_QueryTest extends Elastica_Test
 	}
 
 	public function testSetFields() {
-		$query = new Elastica_Query();
+		$query = new elastica\Query();
 
 		$params = array('query' => 'test');
 
@@ -137,17 +137,17 @@ class Elastica_QueryTest extends Elastica_Test
 	}
 
 	public function testGetQuery() {
-		$query = new Elastica_Query();
+		$query = new elastica\Query();
 
 		try {
 			$query->getQuery();
 			$this->fail('should throw exception because query does not exist');
-		} catch(Elastica_Exception_Invalid $e) {
+		} catch(elastica\exception\Invalid $e) {
 			$this->assertTrue(true);
 		}
 
 
-		$termQuery = new Elastica_Query_Term();
+		$termQuery = new elastica\query\Term();
 		$termQuery->setTerm('text', 'value');
 		$query->setQuery($termQuery);
 

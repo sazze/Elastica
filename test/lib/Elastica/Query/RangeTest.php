@@ -11,7 +11,7 @@ class Elastica_Query_RangeTest extends PHPUnit_Framework_TestCase
 
 	public function testToArray() {
 
-		$range = new Elastica_Query_Range();
+		$range = new elastica\query\Range();
 
 		$field = array('from' => 20, 'to' => 40);
 		$range->addField('age', $field);

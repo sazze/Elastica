@@ -10,13 +10,13 @@ class Elastica_Query_MappingTest extends Elastica_Test
 	}
 
 	public function testMappingStoreFields() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 
 		$index->create(array(), true);
 		$type = $index->getType('test');
 
-		$mapping = new Elastica_Type_Mapping($type,
+		$mapping = new elastica\type\Mapping($type,
 			array(
 				'firstname' => array('type' => 'string', 'store' => 'yes'),
 				// default is store => no expected
@@ -28,7 +28,7 @@ class Elastica_Query_MappingTest extends Elastica_Test
 		$type->setMapping($mapping);
 
 		$firstname = 'Nicolas';
-		$doc = new Elastica_Document(1,
+		$doc = new elastica\Document(1,
 			array(
 				'firstname' => $firstname,
 				'lastname' => 'Ruflin'
@@ -38,8 +38,8 @@ class Elastica_Query_MappingTest extends Elastica_Test
 		$type->addDocument($doc);
 
 		$index->refresh();
-		$queryString = new Elastica_Query_QueryString('ruflin');
-		$query = Elastica_Query::create($queryString);
+		$queryString = new elastica\query\QueryString('ruflin');
+		$query = elastica\Query::create($queryString);
 		$query->setFields(array('*'));
 
 		$resultSet = $type->search($query);
@@ -57,13 +57,13 @@ class Elastica_Query_MappingTest extends Elastica_Test
 	}
 
 	public function testEnableTTL() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 
 		$index->create(array(), true);
 		$type = $index->getType('test');
 
-		$mapping = new Elastica_Type_Mapping($type, array());
+		$mapping = new elastica\type\Mapping($type, array());
 
 		$mapping->enableTTL();
 
@@ -72,14 +72,14 @@ class Elastica_Query_MappingTest extends Elastica_Test
 	}
 
 	public function testNestedMapping() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 
 		$index->create(array(), true);
 		$type = $index->getType('test');
 
 		$this->markTestIncomplete('nested mapping is not set right yet');
-		$mapping = new Elastica_Type_Mapping($type,
+		$mapping = new elastica\type\Mapping($type,
 			array(
 				'test' => array(
 					'type' => 'object', 'store' => 'yes', 'properties' => array(
@@ -97,7 +97,7 @@ class Elastica_Query_MappingTest extends Elastica_Test
 
 		$type->setMapping($mapping);
 
-		$doc = new Elastica_Document(1, array(
+		$doc = new elastica\Document(1, array(
 			'user' => array(
 				'firstname' => 'Nicolas',
 				'lastname' => 'Ruflin',
@@ -116,8 +116,8 @@ class Elastica_Query_MappingTest extends Elastica_Test
 
 	public function testParentMapping() {
 		$index = $this->_createIndex();
-		$parenttype = new Elastica_Type($index, 'parenttype');
-		$parentmapping = new Elastica_Type_Mapping($parenttype,
+		$parenttype = new elastica\Type($index, 'parenttype');
+		$parentmapping = new elastica\type\Mapping($parenttype,
 			array(
 				'name' => array('type' => 'string', 'store' => 'yes')
 			)
@@ -126,8 +126,8 @@ class Elastica_Query_MappingTest extends Elastica_Test
 		$parenttype->setMapping($parentmapping);
 
 
-		$childtype = new Elastica_Type($index, 'childtype');
-		$childmapping = new Elastica_Type_Mapping($childtype,
+		$childtype = new elastica\Type($index, 'childtype');
+		$childmapping = new elastica\type\Mapping($childtype,
 			array(
 				'name' => array('type' => 'string', 'store' => 'yes'),
 			)
@@ -142,7 +142,7 @@ class Elastica_Query_MappingTest extends Elastica_Test
 		$index = $this->_createIndex();
 		$type = $index->getType('notes');
 
-		$mapping = new Elastica_Type_Mapping($type,
+		$mapping = new elastica\type\Mapping($type,
 			array(
 				'note' => array(
 					'store' => 'yes', 'properties' => array(
@@ -155,7 +155,7 @@ class Elastica_Query_MappingTest extends Elastica_Test
 
 		$type->setMapping($mapping);
 
-		$doc = new Elastica_Document(1, array(
+		$doc = new elastica\Document(1, array(
 				'note' => array(
 					array(
 						'titulo'        => 'nota1',
@@ -172,6 +172,3 @@ class Elastica_Query_MappingTest extends Elastica_Test
 		$type->addDocument($doc);
 	}
 }
-
-
-

@@ -12,7 +12,7 @@ class Elastica_Query_QueryStringTest extends PHPUnit_Framework_TestCase
 
 	public function testSearchMultipleFields() {
 		$str = md5(rand());
-		$query = new Elastica_Query_QueryString($str);
+		$query = new elastica\query\QueryString($str);
 
 		$expected = array(
 			'query' => $str
@@ -41,21 +41,21 @@ class Elastica_Query_QueryStringTest extends PHPUnit_Framework_TestCase
 
 	public function testSearch() {
 
-		$client = new Elastica_Client();
-		$index = new Elastica_Index($client, 'test');
+		$client = new elastica\Client();
+		$index = new elastica\Index($client, 'test');
 		$index->create(array(), true);
 		$index->getSettings()->setNumberOfReplicas(0);
 		//$index->getSettings()->setNumberOfShards(1);
 
-		$type = new Elastica_Type($index, 'helloworld');
+		$type = new elastica\Type($index, 'helloworld');
 
-		$doc = new Elastica_Document(1, array('email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
+		$doc = new elastica\Document(1, array('email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
 		$type->addDocument($doc);
 
 		// Refresh index
 		$index->refresh();
 
-		$queryString = new Elastica_Query_QueryString('test*');
+		$queryString = new elastica\query\QueryString('test*');
 		$resultSet = $type->search($queryString);
 
 		$this->assertEquals(1, $resultSet->count());
@@ -64,7 +64,7 @@ class Elastica_Query_QueryStringTest extends PHPUnit_Framework_TestCase
 	public function testSetDefaultOperator() {
 
 		$operator = 'AND';
-		$query = new Elastica_Query_QueryString('test');
+		$query = new elastica\query\QueryString('test');
 		$query->setDefaultOperator($operator);
 
 		$data = $query->toArray();
@@ -74,7 +74,7 @@ class Elastica_Query_QueryStringTest extends PHPUnit_Framework_TestCase
 
 	public function testSetDefaultField() {
 		$default = 'field1';
-		$query = new Elastica_Query_QueryString('test');
+		$query = new elastica\query\QueryString('test');
 		$query->setDefaultField($default);
 
 		$data = $query->toArray();
@@ -83,11 +83,11 @@ class Elastica_Query_QueryStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetQueryStringInvalid() {
-		$query = new Elastica_Query_QueryString();
+		$query = new elastica\query\QueryString();
 		try {
 			$query->setQueryString(array());
 			$this->fail('should throw exception because no string');
-		} catch (Elastica_Exception_Invalid $e) {
+		} catch (elastica\exception\Invalid $e) {
 			$this->assertTrue(true);
 		}
 	}

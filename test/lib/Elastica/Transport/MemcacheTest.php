@@ -13,7 +13,7 @@ class Elastica_Transport_MemcacheTest extends PHPUnit_Framework_TestCase
 	public function testConstruct() {
 		$host = 'localhost';
 		$port = 11211;
-		$client = new Elastica_Client(array('host' => $host, 'port' => $port, 'transport' => 'Memcache'));
+		$client = new elastica\Client(array('host' => $host, 'port' => $port, 'transport' => 'Memcache'));
 
 		$this->assertEquals($host, $client->getHost());
 		$this->assertEquals($port, $client->getPort());
@@ -23,7 +23,7 @@ class Elastica_Transport_MemcacheTest extends PHPUnit_Framework_TestCase
 		// Creates a new index 'xodoa' and a type 'user' inside this index
 		$host = 'localhost';
 		$port = 11211;
-		$client = new Elastica_Client(array('host' => $host, 'port' => $port, 'transport' => 'Memcache'));
+		$client = new elastica\Client(array('host' => $host, 'port' => $port, 'transport' => 'Memcache'));
 
 		$index = $client->getIndex('elastica_test1');
 		$index->create(array(), true);
@@ -32,17 +32,17 @@ class Elastica_Transport_MemcacheTest extends PHPUnit_Framework_TestCase
 
 
 		// Adds 1 document to the index
-		$doc1 = new Elastica_Document(1,
+		$doc1 = new elastica\Document(1,
 			array('username' => 'hans', 'test' => array('2', '3', '5'))
 		);
 		$type->addDocument($doc1);
 
 		// Adds a list of documents with _bulk upload to the index
 		$docs = array();
-		$docs[] = new Elastica_Document(2,
+		$docs[] = new elastica\Document(2,
 			array('username' => 'john', 'test' => array('1', '3', '6'))
 		);
-		$docs[] = new Elastica_Document(3,
+		$docs[] = new elastica\Document(3,
 			array('username' => 'rolf', 'test' => array('2', '3', '7'))
 		);
 		$type->addDocuments($docs);

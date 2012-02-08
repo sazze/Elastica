@@ -10,19 +10,19 @@ class Elastica_Query_NestedTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetQuery() {
-		$nested = new Elastica_Query_Nested();
+		$nested = new elastica\query\Nested();
 		$path = 'test1';
-		
-		$queryString = new Elastica_Query_QueryString('test');
-		$this->assertInstanceOf('Elastica_Query_Nested', $nested->setQuery($queryString));
-		$this->assertInstanceOf('Elastica_Query_Nested', $nested->setPath($path));
+
+		$queryString = new elastica\query\QueryString('test');
+		$this->assertInstanceOf('elastica\query\Nested', $nested->setQuery($queryString));
+		$this->assertInstanceOf('elastica\query\Nested', $nested->setPath($path));
 		$expected = array(
 			'nested' => array(
 				'query' => $queryString->toArray(),
 				'path' => $path,
 			)
 		);
-		
+
 		$this->assertEquals($expected, $nested->toArray());
 	}
 }

@@ -6,9 +6,9 @@ class Elastica_ClusterTest extends Elastica_Test
 {
 
 	public function testGetNodeNames() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 
-		$cluster = new Elastica_Cluster($client);
+		$cluster = new elastica\Cluster($client);
 
 		$names = $cluster->getNodeNames();
 
@@ -17,20 +17,20 @@ class Elastica_ClusterTest extends Elastica_Test
 	}
 
 	public function testGetNodes() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$cluster = $client->getCluster();
 
 		$nodes = $cluster->getNodes();
 
 		foreach($nodes as $node) {
-			$this->assertInstanceOf('Elastica_Node', $node);
+			$this->assertInstanceOf('elastica\Node', $node);
 		}
 
 		$this->assertGreaterThan(0, count($nodes));
 	}
 
 	public function testGetState() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$cluster = $client->getCluster();
 		$state = $cluster->getState();
 		$this->assertInternalType('array', $state);
@@ -38,7 +38,7 @@ class Elastica_ClusterTest extends Elastica_Test
 
 	public function testShutdown() {
 		$this->markTestSkipped('This test shuts down the cluster which means the following tests would not work');
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$cluster = $client->getCluster();
 
 		$cluster->shutdown('2s');
@@ -48,13 +48,13 @@ class Elastica_ClusterTest extends Elastica_Test
 		try {
 			$client->getStatus();
 			$this->fail('Should throw exception because cluster is shut down');
-		} catch(Elastica_Exception_Client $e) {
+		} catch(elastica\exception\Client $e) {
 			$this->assertTrue(true);
 		}
 	}
 
 	public function testGetIndexNames() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$cluster = $client->getCluster();
 
 		$indexName = 'elastica_test999';

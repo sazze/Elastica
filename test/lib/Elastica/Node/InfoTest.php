@@ -8,12 +8,12 @@ class Elastica_Node_InfoTest extends PHPUnit_Framework_TestCase
 	public function tearDown() { }
 
 	public function testGet() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$names = $client->getCluster()->getNodeNames();
 		$name = reset($names);
 
-		$node = new Elastica_Node($name, $client);
-		$info = new Elastica_Node_Info($node);
+		$node = new elastica\Node($name, $client);
+		$info = new elastica\node\Info($node);
 
 		$this->assertInternalType('string', $info->get('os', 'mem', 'total'));
 		$this->assertInternalType('array', $info->get('os', 'mem'));

@@ -11,9 +11,9 @@ class Elastica_Query_CustomScoreTest extends PHPUnit_Framework_TestCase{
 	}
 
     public function testCustomScoreQuery(){
-        $query = new Elastica_Query();
+        $query = new elastica\Query();
 
-        $customscore_query = new Elastica_Query_CustomScore();
+        $customscore_query = new elastica\query\CustomScore();
         $customscore_query->setQuery($query);
         $customscore_query->setScript("doc['hits'].value * (param1 + param2)");
         $customscore_query->addParams(array('param1' => 1123, 'param2' => 2001));

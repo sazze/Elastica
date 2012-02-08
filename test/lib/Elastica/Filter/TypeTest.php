@@ -12,14 +12,14 @@ class Elastica_Filter_TypeTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetType() {
-		$typeFilter = new Elastica_Filter_Type();
+		$typeFilter = new elastica\filter\Type();
 		$returnValue = $typeFilter->setType('type_name');
-		$this->assertInstanceOf('Elastica_Filter_Type', $returnValue);
+		$this->assertInstanceOf('elastica\filter\Type', $returnValue);
 	}
-	
+
 	public function testToArray() {
-		$typeFilter = new Elastica_Filter_Type('type_name');
-		
+		$typeFilter = new elastica\filter\Type('type_name');
+
 		$expectedArray = array(
 			'type' => array('value' => 'type_name')
 		);

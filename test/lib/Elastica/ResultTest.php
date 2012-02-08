@@ -20,7 +20,7 @@ class Elastica_ResultTest extends Elastica_Test
 
 		// Adds 1 document to the index
 		$docId = 3;
-		$doc1 = new Elastica_Document($docId, array('username' => 'hans'));
+		$doc1 = new elastica\Document($docId, array('username' => 'hans'));
 		$type->addDocument($doc1);
 
 		// Refreshes index
@@ -32,7 +32,7 @@ class Elastica_ResultTest extends Elastica_Test
 
 		$result = $resultSet->current();
 
-		$this->assertInstanceOf('Elastica_Result', $result);
+		$this->assertInstanceOf('elastica\Result', $result);
 		$this->assertEquals($index->getName(), $result->getIndex());
 		$this->assertEquals($typeName, $result->getType());
 		$this->assertEquals($docId, $result->getId());
@@ -45,19 +45,19 @@ class Elastica_ResultTest extends Elastica_Test
 		$indexName = 'xodoa';
 		$typeName = 'user';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 		$type = $index->getType($typeName);
 
-		$mapping = new Elastica_Type_Mapping($type);
+		$mapping = new elastica\type\Mapping($type);
 		$mapping->disableSource();
 		$mapping->send();
 
 
 		// Adds 1 document to the index
 		$docId = 3;
-		$doc1 = new Elastica_Document($docId, array('username' => 'hans'));
+		$doc1 = new elastica\Document($docId, array('username' => 'hans'));
 		$type->addDocument($doc1);
 
 		// Refreshes index
@@ -70,7 +70,7 @@ class Elastica_ResultTest extends Elastica_Test
 		$result = $resultSet->current();
 
 		$this->assertEquals(array(), $result->getSource());
-		$this->assertInstanceOf('Elastica_Result', $result);
+		$this->assertInstanceOf('elastica\Result', $result);
 		$this->assertEquals($indexName, $result->getIndex());
 		$this->assertEquals($typeName, $result->getType());
 		$this->assertEquals($docId, $result->getId());

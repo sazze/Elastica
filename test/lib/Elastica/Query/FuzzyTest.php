@@ -10,7 +10,7 @@ class Elastica_Query_FuzzyTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testToArray() {
-		$fuzzy = new Elastica_Query_Fuzzy();
+		$fuzzy = new elastica\query\Fuzzy();
 
 		$fuzzy->addField('user', array('value' => 'Nicolas', 'boost' => 1.0));
 
@@ -28,18 +28,18 @@ class Elastica_Query_FuzzyTest extends PHPUnit_Framework_TestCase
 
 	public function testQuery() {
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 		$index->create(array(), true);
 		$type = $index->getType('test');
 
-		$doc = new Elastica_Document(1, array('name' => 'Basel-Stadt'));
+		$doc = new elastica\Document(1, array('name' => 'Basel-Stadt'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('name' => 'New York'));
+		$doc = new elastica\Document(2, array('name' => 'New York'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('name' => 'Baden'));
+		$doc = new elastica\Document(3, array('name' => 'Baden'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(4, array('name' => 'Baden Baden'));
+		$doc = new elastica\Document(4, array('name' => 'Baden Baden'));
 		$type->addDocument($doc);
 
 
@@ -48,7 +48,7 @@ class Elastica_Query_FuzzyTest extends PHPUnit_Framework_TestCase
 		$type = 'text_phrase';
 		$field = 'name';
 
-		$query = new Elastica_Query_Fuzzy();
+		$query = new elastica\query\Fuzzy();
 		$query->addField('name', array('value' => 'Baden'));
 
 		$resultSet = $index->search($query);

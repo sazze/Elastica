@@ -6,11 +6,11 @@ require_once dirname(__FILE__) . '/../../../bootstrap.php';
 class Elastica_Filter_NestedTest extends Elastica_Test
 {
     public function setUp() {
-        $client = new Elastica_Client();
+        $client = new elastica\Client();
         $index = $client->getIndex('elastica_test_filter_nested');
 		$index->create(array(), true);
         $type = $index->getType('user');
-        $mapping = new Elastica_Type_Mapping();
+        $mapping = new elastica\type\Mapping();
         $mapping->setProperties(
 			array(
 				'firstname' => array('type' => 'string', 'store' => 'yes'),
@@ -27,7 +27,7 @@ class Elastica_Filter_NestedTest extends Elastica_Test
 
 		// Adds a list of documents with _bulk upload to the index
 		$docs = array();
-		$docs[] = new Elastica_Document(1,
+		$docs[] = new elastica\Document(1,
             array(
                 'firstname' => 'Nicolas',
                 'lastname' => 'Ruflin',
@@ -36,7 +36,7 @@ class Elastica_Filter_NestedTest extends Elastica_Test
                 )
             )
 		);
-		$docs[] = new Elastica_Document(2,
+		$docs[] = new elastica\Document(2,
             array(
                 'firstname' => 'Nicolas',
                 'lastname' => 'Ippolito',
@@ -53,15 +53,15 @@ class Elastica_Filter_NestedTest extends Elastica_Test
 	}
 
     public function tearDown() {
-        $client = new Elastica_Client();
+        $client = new elastica\Client();
         $index = $client->getIndex('elastica_test_filter_nested');
         $index->delete();
 	}
 
 	public function testToArray() {
-        $f = new Elastica_Filter_Nested();
+        $f = new elastica\filter\Nested();
         $this->assertEquals(array('nested' => array()), $f->toArray());
-        $q = new Elastica_Query_Terms();
+        $q = new elastica\query\Terms();
         $q->setTerms('hobby', array('guitar'));
         $f->setPath('hobbies');
         $f->setQuery($q);
@@ -80,30 +80,30 @@ class Elastica_Filter_NestedTest extends Elastica_Test
 
     public function testShouldReturnTheRightNumberOfResult()
     {
-        $f = new Elastica_Filter_Nested();
+        $f = new elastica\filter\Nested();
         $this->assertEquals(array('nested' => array()), $f->toArray());
-        $q = new Elastica_Query_Terms();
+        $q = new elastica\query\Terms();
         $q->setTerms('hobby', array('guitar'));
         $f->setPath('hobbies');
         $f->setQuery($q);
 
-        $c = new Elastica_Client();
-        $s = new Elastica_Search($c);
+        $c = new elastica\Client();
+        $s = new elastica\Search($c);
         $i = $c->getIndex('elastica_test_filter_nested');
         $s->addIndex($i);
         $r = $s->search($f);
 
         $this->assertEquals(1, $r->getTotalHits());
 
-        $f = new Elastica_Filter_Nested();
+        $f = new elastica\filter\Nested();
         $this->assertEquals(array('nested' => array()), $f->toArray());
-        $q = new Elastica_Query_Terms();
+        $q = new elastica\query\Terms();
         $q->setTerms('hobby', array('opensource'));
         $f->setPath('hobbies');
         $f->setQuery($q);
 
-        $c = new Elastica_Client();
-        $s = new Elastica_Search($c);
+        $c = new elastica\Client();
+        $s = new elastica\Search($c);
         $i = $c->getIndex('elastica_test_filter_nested');
         $s->addIndex($i);
         $r = $s->search($f);

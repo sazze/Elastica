@@ -11,11 +11,11 @@ class Elastica_Index_StatusTest extends PHPUnit_Framework_TestCase
 		$indexName = 'test';
 		$aliasName = 'test-alias';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
-		$status = new Elastica_Index_Status($index);
+		$status = new elastica\index\Status($index);
 
 		$aliases = $status->getAliases();
 
@@ -34,11 +34,11 @@ class Elastica_Index_StatusTest extends PHPUnit_Framework_TestCase
 		$indexName = 'test';
 		$aliasName = 'test-alias';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 
-		$status = new Elastica_Index_Status($index);
+		$status = new elastica\index\Status($index);
 
 		$this->assertFalse($status->hasAlias($aliasName));
 
@@ -51,7 +51,7 @@ class Elastica_Index_StatusTest extends PHPUnit_Framework_TestCase
 	public function testGetSettings() {
 		$indexName = 'test';
 
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex($indexName);
 		$index->create(array(), true);
 		$status = $index->getStatus();

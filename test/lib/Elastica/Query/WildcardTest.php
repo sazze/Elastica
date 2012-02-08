@@ -10,7 +10,7 @@ class Elastica_Query_WildcardTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testConstructEmpty() {
-		$wildcard = new Elastica_Query_Wildcard();
+		$wildcard = new elastica\query\Wildcard();
 		$this->assertEmpty($wildcard->getParams());
 	}
 
@@ -19,7 +19,7 @@ class Elastica_Query_WildcardTest extends PHPUnit_Framework_TestCase
 		$value = 'Ru*lin';
 		$boost = 2.0;
 
-		$wildcard = new Elastica_Query_Wildcard($key, $value, $boost);
+		$wildcard = new elastica\query\Wildcard($key, $value, $boost);
 
 		$expectedArray = array(
 			'wildcard' => array(
@@ -34,7 +34,7 @@ class Elastica_Query_WildcardTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSearchWithAnalyzer() {
-		$client = new Elastica_Client();
+		$client = new elastica\Client();
 		$index = $client->getIndex('test');
 
 		$indexParams = array(
@@ -52,48 +52,48 @@ class Elastica_Query_WildcardTest extends PHPUnit_Framework_TestCase
 		$index->create($indexParams, true);
 		$type = $index->getType('test');
 
-		$mapping = new Elastica_Type_Mapping($type, array(
+		$mapping = new elastica\type\Mapping($type, array(
 				'name' => array('type' => 'string', 'store' => 'no', 'analyzer' => 'lw'),
 			)
 		);
 		$type->setMapping($mapping);
 
-		$doc = new Elastica_Document(1, array('name' => 'Basel-Stadt'));
+		$doc = new elastica\Document(1, array('name' => 'Basel-Stadt'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(2, array('name' => 'New York'));
+		$doc = new elastica\Document(2, array('name' => 'New York'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(3, array('name' => 'Baden'));
+		$doc = new elastica\Document(3, array('name' => 'Baden'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(4, array('name' => 'Baden Baden'));
+		$doc = new elastica\Document(4, array('name' => 'Baden Baden'));
 		$type->addDocument($doc);
-		$doc = new Elastica_Document(5, array('name' => 'New Orleans'));
+		$doc = new elastica\Document(5, array('name' => 'New Orleans'));
 		$type->addDocument($doc);
 
 		$index->refresh();
 
 
-		$query = new Elastica_Query_Wildcard();
+		$query = new elastica\query\Wildcard();
 		$query->setValue('name', 'ba*');
 		$resultSet = $index->search($query);
 
 		$this->assertEquals(3, $resultSet->count());
 
 
-		$query = new Elastica_Query_Wildcard();
+		$query = new elastica\query\Wildcard();
 		$query->setValue('name', 'baden*');
 		$resultSet = $index->search($query);
 
 		$this->assertEquals(2, $resultSet->count());
 
 
-		$query = new Elastica_Query_Wildcard();
+		$query = new elastica\query\Wildcard();
 		$query->setValue('name', 'baden b*');
 		$resultSet = $index->search($query);
 
 		$this->assertEquals(1, $resultSet->count());
 
 
-		$query = new Elastica_Query_Wildcard();
+		$query = new elastica\query\Wildcard();
 		$query->setValue('name', 'baden bas*');
 		$resultSet = $index->search($query);
 
